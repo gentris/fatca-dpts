@@ -1,0 +1,124 @@
+﻿@model FATCA_Data_Preparation_and_Transmission_System.Models.ConfigurationsViewModel
+@{
+    ViewBag.Title = "Index";
+}
+<br />
+<br />
+<div class="card rounded-0 shadow col-8 offset-2">
+    <div class="card-header bg-white"><h2 class="m-0">Encrypt</h2></div>
+    <div class="card-body">
+
+        @using (Html.BeginForm("Index", "Encrypt", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+
+            @Html.AntiForgeryToken()
+            <div class="form-group row">
+                @Html.Label("Report in XML", new { @class = "col-form-label col-sm-5" })
+                <div class="col col-sm-5 offset-1">
+                    <label class="col-form-label inputIcon" for="Report" aria-hidden="true">
+                        <i class="fa fa-file-code-o btn p-0 fileIcons"></i><span class="col-form-label align-middle ml-1">No file chosen</span>
+                    </label>
+                    @Html.TextBoxFor(m => m.Report, new { @class = "form-control d-none", type = "file" })
+                    @Html.ValidationMessageFor(m => m.Report)
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.Label("Sender private key", new { @class = "col-form-label col-sm-5" })
+                <div class="col col-sm-5 offset-1">
+                    <label class="col-form-label inputIcon" for="SenderCertificate" aria-hidden="true">
+                        <i class="fa fa-file-text-o btn p-0 fileIcons"></i><span class="col-form-label align-middle ml-1">No file chosen</span>
+                    </label>
+                    @Html.TextBox("SenderCertificate", null, new { @class = "form-control d-none", type = "file" })
+                    @Html.ValidationMessageFor(m => m.SenderCertificate)
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.Label("Sender private key password", new { @class = "col-form-label col-sm-5" })
+                <div class="col col-sm-5 offset-1">
+                    @Html.TextBox("SenderCertPassword", null, new { @class = "form-control", type = "password", placeholder = "Password" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.Label("IRS public key", new { @class = "col-form-label col-sm-5" })
+                <div class="col col-sm-5 offset-1">
+                    <label class="col-form-label inputIcon" for="IRSCertificate" aria-hidden="true">
+                        <i class="fa fa-file-text-o btn p-0 fileIcons"></i><span class="col-form-label align-middle ml-1">No file chosen</span>
+                    </label>
+                    @Html.TextBox("IRSCertificate", null, new { @class = "form-control d-none", type = "file" })
+                    @Html.ValidationMessageFor(m => m.IRSCertificate)
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.Label("Model 1 Option 2", new { @class = "col-form-label col-sm-3 ", @for = "Model1Option2" })
+                <div class="col-sm-1">
+                    @Html.CheckBox("Model1Option2", false, new { @class = "custom-checkbox align-bottom checkbox-template" })
+                </div>
+            </div>
+            <div class="form-group row model1Option2" style="display: none;">
+                @Html.Label("HCTA public key", new { @class = "col-form-label col-sm-5" })
+                <div class="col col-sm-5 offset-1">
+                    <label class="col-form-label inputIcon" for="HCTACertificate" aria-hidden="true">
+                        <i class="fa fa-file-o btn p-0 fileIcons"></i><span class="col-form-label align-middle ml-1">No file chosen</span>
+                    </label>
+                    @Html.TextBox("HCTACertificate", null, new { @class = "form-control d-none", type = "file" })
+                </div>
+            </div>
+            <br />
+
+            <div class="form-group row">
+                <div class="col-sm-5"></div>
+                <div class="col col-sm-5 offset-1">
+                    <button type="submit" class="btn btn-primary">Encrypt</button>
+                </div>
+            </div>
+
+        }
+
+    </div>
+</div>
+
+<script>
+
+    fileLabelsEventHandlers();
+
+    function fileLabelsEventHandlers() {
+        $("input[type='file']").each(function() {
+            $(this).change(function () {
+                let filePath = $(this).prop("value");
+                let fileName = filePath.substr(filePath.lastIndexOf("\\") + 1);
+
+                if (fileName === "") {
+                    fileName = "No file chosen";
+                }
+
+                $(".inputIcon[for='" + $(this).prop("name") + "'] > span").html(fileName);
+            });
+        });
+    }
+
+    function test() {
+        console.log("The script is running...");
+        var x = $("input[type='file']")[0];
+        console.log("filel: " + x.value);
+    }
+
+    model1Option2();
+
+    function model1Option2() {
+        $("#Model1Option2").change(function () {
+            if ($(this).prop("checked"))
+                $(".model1Option2").css("display", "flex");
+            else
+                $(".model1Option2").css("display", "none");
+        });
+    }
+
+</script>
+
+

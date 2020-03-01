@@ -1,0 +1,112 @@
+﻿@model FATCA_Data_Preparation_and_Transmission_System.Models.SendViewModel
+@{
+    ViewBag.Title = "Index";
+    string packagePath = (string)ViewBag.PackagePath;
+    string packageName = Path.GetFileName(packagePath);
+    bool fileUploadedFromClient = false;
+}
+<br/>
+<br/>
+<div class="card rounded-0 shadow col-lg-8 offset-lg-2">
+    <div class="card-header bg-white"><h2 class="m-0">Send to IRS</h2></div>
+    <div class="card-body">
+        @Html.DisplayFor(m => Model.EncryptedPackage.FileName)
+        @using (Html.BeginForm("Send", "Send", new { packagePath = packagePath }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+
+            @Html.AntiForgeryToken()
+            @Html.Hidden("PackagePath", packagePath);
+            <div class="row">
+                @Html.Label("Encrypted package", new { @class = "col-form-label col-sm-5" })
+                <div class="col col-sm-7">
+                    <div class="input-group">
+                        <label class="input-group-addon" for="EncryptedPackage">
+                            <i class="fa fa-file fileIcons"></i>
+                        </label>
+                        <input readonly type="text" placeholder="No file chosen" class="form-control" value="@packageName">
+                    </div>
+                    @Html.TextBox("EncryptedPackage", null, new { @class = "form -control d-none", type = "file", value = packagePath })
+                    @Html.ValidationMessageFor(m => m.EncryptedPackage)
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                @Html.Label("IDES SFTP Username", new { @class = "col-form-label col-sm-5" })
+                <div class="col col-sm-7">
+                    <div class="input-group">
+                        <div class="input-group-addon invisible d-none">
+                            <i class="fa fa-file fileIcons"></i>
+                        </div>
+                        @Html.TextBox("SFTPUsername", null, new { @class = "form-control", placeholder = "Username" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                @Html.Label("IDES SFTP Password", new { @class = "col-form-label col-sm-5" })
+                <div class="col col-sm-7">
+                    <div class="input-group">
+                        <div class="input-group-addon invisible d-none">
+                            <i class="fa fa-file fileIcons"></i>
+                        </div>
+                        @Html.TextBox("SFTPPassword", null, new { @class = "form-control", type = "password", placeholder = "Password" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                @Html.Label("IDES SFTP Server", new { @class = "col-form-label col-sm-5" })
+                <div class="col col-sm-7">
+                    @Html.DropDownListFor(m => m.SFTPServer, new List<SelectListItem>
+                   {
+                       new SelectListItem { Text = "PRODUCTION: WWW.IDESGATEWAY.COM", Value = "PRODUCTION: WWW.IDESGATEWAY.COM", Selected = true},
+                       new SelectListItem { Text = "TEST: WWWPSE.IDESGATEWAY.COM", Value = "TEST: WWWPSE.IDESGATEWAY.COM"},
+                       new SelectListItem { Text = "SAT: WWWSAT.IDESGATEWAY.COM", Value = "SAT: WWWSAT.IDESGATEWAY.COM"},
+
+                   }, new { @class = "form-control"})
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-lg-10"></div>
+                <div class="col col-lg-2 text-right">
+                    <button type="submit" class="btn btn-primary m-0">Send</button>
+                </div>
+            </div>
+
+        }
+
+    </div>
+</div>
+
+<script>
+
+    fileLabelsEventHandlers();
+
+    function fileLabelsEventHandlers() {
+        $("input[type='file']").each(function() {
+            $(this).change(function () {
+                let filePath = $(this).prop("value");
+                let fileName = filePath.substr(filePath.lastIndexOf("\\") + 1);
+                $("#PackagePath").val("");
+                $(".input-group-addon[for='" + $(this).prop("name") + "'] + input").val(fileName);
+            });
+        });
+    }
+
+    function test() {
+        console.log("The script is running...");
+        var x = $("input[type='file']")[0];
+        console.log("filel: " + x.value);
+    }
+
+    model1Option2();
+
+    function model1Option2() {
+        $("#Model1Option2").change(function () {
+            $(".model1Option2").toggleClass("d-none");
+        });
+    }
+
+</script>
+

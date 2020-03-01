@@ -1,0 +1,100 @@
+﻿
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 400px;
+    border-radius: 0;
+}
+
+.col > a {
+    color: #234e76 !important;
+}
+
+body {
+    background-color: #e6eaed;
+}
+
+td {
+    border: 5px solid #e6eaed !important;
+}
+
+.navbar {
+    background-color: #234e76 !important;
+}
+
+.btn {
+    border-radius: 0;
+}
+
+.navbarItems {
+    font-size: 18px;
+    font-family: Open Sans, sans-serif;
+}
+
+.navbarItems:hover {
+    font-size: 18px;
+    margin-bottom: -1px;
+}
+
+/* XML Tree view*/
+#treeView, .treeView {
+    max-height: 425px;
+    overflow-y: scroll;
+    display: none;
+    font-family: Calibri;
+}
+
+    #treeView li, .treeView li {
+        list-style: none;
+    }
+
+    #treeView ul, .treeView ul {
+        padding-left: 1em;
+    }
+
+    #treeView b, .treeView b {
+        padding-right: 0.5em;
+    }
+
+/*
+
+.fa {
+    font-size: 22px !important;
+}
+
+    */
+
+.fileIcons {
+    font-size: 20px !important;
+}
+
+
+.form-control {
+    border-radius: 0;
+}
+
+.card-header {
+    box-shadow: none;
+}
+
+@media (max-width: 575px) {
+    nav.navbar .nav-item > a {
+        font-size: 18px;
+    }
+}
+
+

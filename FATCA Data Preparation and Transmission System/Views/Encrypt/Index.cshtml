@@ -1,0 +1,152 @@
+﻿@model FATCA_Data_Preparation_and_Transmission_System.Models.EncryptViewModel
+@{
+    ViewBag.Title = "Index";
+}
+<br/>
+<br/>
+<div class="card rounded-0 shadow col-lg-8 offset-lg-2">
+    <div class="card-header bg-white"><h2 class="m-0">Encrypt</h2></div>
+    <div class="card-body">
+
+        @using (Html.BeginForm("Index", "Encrypt", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                @Html.Label("Report in XML", new { @class = "col-form-label col-sm-5" })
+                <div class="col col-sm-7">
+                    <div class="input-group">
+                        <label class="input-group-addon" for="Report">
+                            <i class="fa fa-file fileIcons"></i>
+                        </label>
+                        <input readonly type="text" placeholder="No file chosen" class="form-control">
+                    </div>
+                    @Html.TextBox("Report", null, new { @class = "form-control d-none", type = "file" })
+                    @Html.ValidationMessageFor(m => m.Report)
+                </div>
+            </div>
+
+            <div class="row">
+                @Html.Label("Sender private key", new { @class = "col-form-label col-sm-5" })
+                <div class="col col-sm-7">
+                    <div class="input-group">
+                        <label class="input-group-addon" for="SenderCertificate">
+                            <i class="fa fa-file fileIcons"></i>
+                        </label>
+                        <input readonly type="text" placeholder="No file chosen" class="form-control">
+                    </div>
+                    @Html.TextBox("SenderCertificate", null, new { @class = "form-control d-none", type = "file" })
+                    @Html.ValidationMessageFor(m => m.SenderCertificate)
+
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                @Html.Label("Sender private key password", new { @class = "col-form-label col-sm-5" })
+                <div class="col col-sm-7">
+                    <div class="input-group">
+                        <div class="input-group-addon invisible d-none">
+                            <i class="fa fa-file fileIcons"></i>
+                        </div>
+                        @Html.TextBox("SenderCertPassword", null, new { @class = "form-control", type = "password", placeholder = "Password" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                @Html.Label("IRS public key", new { @class = "col-form-label col-sm-5" })
+                <div class="col col-sm-7">
+                    <div class="input-group">
+                        <label class="input-group-addon" for="IRSCertificate">
+                            <i class="fa fa-file fileIcons"></i>
+                        </label>
+                        <input readonly type="text" placeholder="No file chosen" class="form-control">
+                    </div>
+                    @Html.TextBox("IRSCertificate", null, new { @class = "form-control d-none", type = "file" })
+                    @Html.ValidationMessageFor(m => m.IRSCertificate)
+
+                </div>
+            </div>
+
+            <div class="row">
+                @Html.Label("Model 1 Option 2", new { @class = "col-form-label col-sm-3 col-md-4 col-lg-3 col-6", @for = "Model1Option2" })
+                <div class="col-sm-1 col-4">
+                    @Html.CheckBox("Model1Option2", false, new { @class = "custom-checkbox align-bottom checkbox-template" })
+                </div>
+            </div>
+            <div class="form-group row model1Option2 d-none">
+                @Html.Label("HCTA public key", new { @class = "col-form-label col-sm-5" })
+                <div class="col col-sm-7">
+                    <div class="input-group">
+                        <label class="input-group-addon" for="HCTACertificate">
+                            <i class="fa fa-file fileIcons"></i>
+                        </label>
+                        <input readonly type="text" placeholder="No file chosen" class="form-control">
+                    </div>
+                    @Html.TextBox("HCTACertificate", null, new { @class = "form-control d-none", type = "file" })
+                </div>
+            </div>
+
+            <div class="row model1Option2 d-none">
+                @Html.Label("HCTA public key password", new { @class = "col-form-label col-sm-5" })
+                <div class="col col-sm-7">
+                    <div class="input-group">
+                        <div class="input-group-addon invisible d-none">
+                            <i class="fa fa-file fileIcons"></i>
+                        </div>
+                        @Html.TextBox("HCTACertPassword", null, new { @class = "form-control", type = "password", placeholder = "Password (if needed)" })
+                    </div>
+                </div>
+            </div>
+            <br />
+
+            <div class="form-group row">
+                <div class="col-lg-10"></div>
+                <div class="col col-lg-2 text-right">
+                    <button type="submit" class="btn btn-primary m-0">Encrypt</button>
+                </div>
+            </div>
+
+        }
+
+    </div>
+</div>
+
+<script>
+
+    fileLabelsEventHandlers();
+
+    function fileLabelsEventHandlers() {
+        $("input[type='file']").each(function() {
+            $(this).change(function () {
+                let filePath = $(this).prop("value");
+                let fileName = filePath.substr(filePath.lastIndexOf("\\") + 1);
+
+                console.log(fileName);
+
+                if (fileName === "") {
+                    //fileName = "No file chosen";
+                }
+
+                $(".input-group-addon[for='" + $(this).prop("name") + "'] + input").val(fileName);
+            });
+        });
+    }
+
+    function test() {
+        console.log("The script is running...");
+        var x = $("input[type='file']")[0];
+        console.log("filel: " + x.value);
+    }
+
+    model1Option2();
+
+    function model1Option2() {
+        $("#Model1Option2").change(function () {
+            $(".model1Option2").toggleClass("d-none");
+        });
+    }
+
+</script>
+

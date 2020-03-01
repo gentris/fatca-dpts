@@ -1,0 +1,126 @@
+﻿@model FATCA_Data_Preparation_and_Transmission_System.Models.NotificationsViewModel
+@{
+    ViewBag.Title = "Download";
+    var decryptedNotificationXml = ViewBag.DecryptedNotificationXML;
+    var decryptedNotificationPath = ViewBag.DecryptedNotificationPath;
+    var decryptedNotificationName = Path.GetFileName(ViewBag.DecryptedNotificationPath);
+}
+<br />
+<br />
+<div class="card rounded-0 shadow col-lg-8 offset-lg-2">
+    <div class="card-header bg-white"><h2 class="m-0">Decrypted notification</h2></div>
+    <div class="card-body">
+        <p>Notification <b>@Html.DisplayFor(m => decryptedNotificationName)</b></p>
+
+        @using (Html.BeginForm("Index", "Send", new { packagePath = ViewBag.PackagePath }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "text-center" }))
+        {
+
+            <button id="btnRead" class="btn btn-md btn-primary col-md-5 offset-md-3 m-0"><i class="fa fa-file-code-o" aria-hidden="true"></i> Read notification</button>
+        }
+
+        @using (Html.BeginForm("DownloadPackage", "Encrypt", new { packagePath = decryptedNotificationPath }, FormMethod.Post, new { enctype = "multipart/form-data", @class = "text-center" }))
+        {
+            <button type="submit" class="btn btn-md btn-primary col-md-5 offset-md-3 m-0 mt-3">
+                <i class="fa fa-cloud-download" aria-hidden="true"></i> Download
+            </button>
+        }
+
+    </div>
+</div>
+
+<script>
+
+    $("#btnRead").click(function (e) {
+        e.preventDefault();
+        let notification = unescape(@Html.Raw(Json.Encode(decryptedNotificationXml)));
+        $(".modal-body").append('<ul id="treeView"><li></li></ul>');
+        $('#treeView').show();
+        $(".modal").modal("show");
+
+        var tree = $.parseXML(notification);
+
+        traverse($('#treeView li'), tree.firstChild);
+        $('<b style="color: #234e76; cursor: pointer; font-size: 20px">–<\/b>')
+            .prependTo('#treeView li:has(li)')
+            .click(function () {
+                var sign = $(this).text();
+                if (sign === "–")
+                    $(this).text('+').next().children().hide();
+                else
+                    $(this).text('–').next().children().show();
+            });
+    });
+
+    function readNotification(e) {
+        e.preventDefault();
+        let notification = '@Html.Raw(Json.Encode(decryptedNotificationXml))';
+        $(".modal-body").append('<ul id="treeView"><li></li></ul>');
+        $('#treeView').show();
+        $(".modal").modal("show");
+
+        var tree = $.parseXML(notification);
+
+        traverse($('#treeView li'), tree.firstChild);
+        $('<b style="color: rgb(121, 106, 238); cursor: pointer; font-size: 20px">–<\/b>')
+            .prependTo('#treeView li:has(li)')
+            .click(function () {
+                var sign = $(this).text();
+                if (sign === "–")
+                    $(this).text('+').next().children().hide();
+                else
+                    $(this).text('–').next().children().show();
+            });
+    }
+
+    function traverse(node, tree) {
+        var children = $(tree).children();
+        node.append(tree.nodeName);
+        if (children.length) {
+            var ul = $("<ul>").appendTo(node);
+            children.each(function () {
+                var li = $('<li>').appendTo(ul);
+                traverse(li, this);
+            });
+        } else {
+            $('<ul><li><strong>' + $(tree).text() + '</strong><\/li><\/ul>').appendTo(node);
+        }
+    }
+
+    fileLabelsEventHandlers();
+
+    function fileLabelsEventHandlers() {
+        $("input[type='file']").each(function() {
+            $(this).change(function () {
+                let filePath = $(this).prop("value");
+                let fileName = filePath.substr(filePath.lastIndexOf("\\") + 1);
+
+                console.log(fileName);
+
+                if (fileName === "") {
+                    //fileName = "No file chosen";
+                }
+
+                $(".input-group-addon[for='" + $(this).prop("name") + "'] + input").val(fileName);
+            });
+        });
+    }
+
+    function test() {
+        console.log("The script is running...");
+        var x = $("input[type='file']")[0];
+        console.log("filel: " + x.value);
+    }
+
+    model1Option2();
+
+    function model1Option2() {
+        $("#Model1Option2").change(function () {
+            if ($(this).prop("checked"))
+                $(".model1Option2").css("display", "flex");
+            else
+                $(".model1Option2").css("display", "none");
+        });
+    }
+
+</script>
+
